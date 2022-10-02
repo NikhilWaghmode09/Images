@@ -2,24 +2,24 @@
 #include <fstream>
 #include <string>
 #include <vector>
-
+using namespace std;
 /* Reads ascii file of 1s and 0s and the writes a binary file. */
 
 struct PBM
 {
     unsigned int width;
     unsigned int height;
-    std::string comment;
-    std::vector<std::vector<char>> data;
+    string comment;
+    vector<vector<char>> data;
 
-    bool ReadAscii(std::ifstream& f)
+    bool ReadAscii(ifstream& f)
     {
-        std::string id;
-        if(!std::getline(f, id) || id != "P1")
+        string id;
+        if(!getline(f, id) || id != "P1")
         {
             return false;
         }
-        if(f.peek() == '#' && !std::getline(f, comment))
+        if(f.peek() == '#' && !getline(f, comment))
         {
             return false;
         }
@@ -44,7 +44,7 @@ struct PBM
         return true;
     }
 
-    bool WriteBinary(std::ofstream& f)
+    bool WriteBinary(ofstream& f)
     {
         if(!(f << "P4\n"))
         {
@@ -58,10 +58,10 @@ struct PBM
         {
             return false;
         }
-        // std::vector<char> linebits((width + (CHAR_BIT - 1)) / CHAR_BIT);
+        // vector<char> linebits((width + (CHAR_BIT - 1)) / CHAR_BIT);
         for(size_t y = 0; y < data.size(); ++y)
         {
-            // std::fill(linebits.begin(), linebits.end(), 0);
+            // fill(linebits.begin(), linebits.end(), 0);
             // for(size_t x = 0; x < width; ++x)
             // {
             //     const int byte_pos = x / CHAR_BIT;
@@ -75,7 +75,7 @@ struct PBM
         }
         return true;
     }
-    // bool WriteBinary(std::ofstream& f)
+    // bool WriteBinary(ofstream& f)
     // {
     //     if(!(f << "P4\n"))
     //     {
@@ -89,10 +89,10 @@ struct PBM
     //     {
     //         return false;
     //     }
-    //     std::vector<char> linebits((width + (CHAR_BIT - 1)) / CHAR_BIT);
+    //     vector<char> linebits((width + (CHAR_BIT - 1)) / CHAR_BIT);
     //     for(size_t y = 0; y < data.size(); ++y)
     //     {
-    //         std::fill(linebits.begin(), linebits.end(), 0);
+    //         fill(linebits.begin(), linebits.end(), 0);
     //         for(size_t x = 0; x < width; ++x)
     //         {
     //             const int byte_pos = x / CHAR_BIT;
@@ -112,32 +112,32 @@ int main(int argc, char * argv[])
 {
     if(argc != 3)
     {
-        std::cerr << "Usage: convertpbm <ascii filename> <binary filename>\n";
+        cerr << "Usage: convertpbm <ascii filename> <binary filename>\n";
         return 0;
     }
 
     PBM pbm;
 
-    std::ifstream inFile(argv[1]);
+    ifstream inFile(argv[1]);
     if(!inFile)
     {
-        std::cerr << "Could not open '" << argv[1] << "' for input!\n";
+        cerr << "Could not open '" << argv[1] << "' for input!\n";
         return 0;
     }
     if(!pbm.ReadAscii(inFile))
     {
-        std::cerr << "Error reading input file!\n";
+        cerr << "Error reading input file!\n";
     }
 
-    std::ofstream outFile(argv[2], std::ios::binary);
+    ofstream outFile(argv[2], ios::binary);
     if(!outFile)
     {
-        std::cerr << "Could not open '" << argv[1] << "' for output!\n";
+        cerr << "Could not open '" << argv[1] << "' for output!\n";
         return 0;
     }
     if(!pbm.WriteBinary(outFile))
     {
-        std::cerr << "Error writing output file!\n";
+        cerr << "Error writing output file!\n";
     }
 
     return 0;
